@@ -1,25 +1,43 @@
-# Облегчитель фоточек для Аси — Cloudflare Pages + Cerebras
+# LoveDrop — Cloudflare Pages + Cerebras
 
-Исправление fix1:
+LoveDrop — маленький сервис для быстрой подготовки изображений к web.
 
-- увеличен `max_completion_tokens` с 90 до 350;
-- добавлена подробная диагностика полного ответа Cerebras;
-- добавлено устойчивое чтение `message.content`, если оно придёт не строкой;
-- добавлена опциональная переменная `CEREBRAS_MODEL`.
+Основная функция:
 
-Если нужно сменить модель без правки кода, в Cloudflare можно добавить обычную переменную:
+- загрузка изображения;
+- уменьшение, если меньшая сторона больше 2000 px;
+- конвертация в облегчённый JPG;
+- скачивание результата.
+
+Милый сюрприз:
+
+- кнопка-сердечко генерирует короткое признание через Cerebras;
+- API-ключ хранится только в Cloudflare Secret;
+- клиентский лимит 10 признаний в час.
+
+## SEO и файлы
+
+Добавлены:
+
+- базовые meta-теги;
+- Open Graph;
+- Twitter Card;
+- `favicon.svg`;
+- `apple-touch-icon.svg`;
+- `site.webmanifest`;
+- `robots.txt`;
+- `sitemap.xml`;
+- `og-image.svg`.
+
+Основной домен для SEO:
 
 ```txt
-CEREBRAS_MODEL
+https://love.cinemaprompt.ru/
 ```
 
-Например:
+## Cloudflare Secret
 
-```txt
-gpt-oss-120b
-```
-
-Основной секрет:
+В Cloudflare Pages должен быть задан Secret:
 
 ```txt
 CEREBRAS_API_KEY
