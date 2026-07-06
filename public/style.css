@@ -52,6 +52,8 @@ body {
   background: var(--cream);
   box-shadow: var(--shadow);
   backdrop-filter: blur(22px);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  transform: translateZ(0);
 }
 
 .glow {
@@ -492,6 +494,8 @@ h1 {
     overflow: hidden;
     isolation: isolate;
     box-sizing: border-box;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    transform: translateZ(0);
   }
 
   h1 {
