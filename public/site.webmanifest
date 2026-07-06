@@ -1,7 +1,7 @@
 {
-  "name": "LoveDrop",
-  "short_name": "LoveDrop",
-  "description": "Маленький сервис для быстрой подготовки изображений к web.",
+  "name": "LightDrop",
+  "short_name": "LightDrop",
+  "description": "Нежный JPG-компрессор для подготовки изображений к публикации.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#fff0f6",

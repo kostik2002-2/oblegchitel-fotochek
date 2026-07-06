@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://love.cinemaprompt.ru/sitemap.xml
+Sitemap: https://lightdrop.cinemaprompt.ru/sitemap.xml

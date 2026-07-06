@@ -22,7 +22,7 @@ const BLOCK_MESSAGE = "Любовь моя, отдохни часок, дай м
 
 let loveTimerId = null;
 let processedUrl = null;
-let processedFileName = "lovedrop-photo-light.jpg";
+let processedFileName = "lightdrop-photo-light.jpg";
 
 
 input.addEventListener("change", () => {
@@ -246,7 +246,7 @@ function makeOutputName(originalName) {
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "");
 
-  return `${cleanName || "lovedrop-photo"}-light.jpg`;
+  return `${cleanName || "lightdrop-photo"}-light.jpg`;
 }
 
 function formatBytes(bytes) {
