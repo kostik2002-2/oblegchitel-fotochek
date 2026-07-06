@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Облегчитель фоточек для Аси</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="card" aria-label="Облегчитель фоточек">
+      <div class="glow glow-one"></div>
+      <div class="glow glow-two"></div>
+
+      <p class="eyebrow">нежный jpg-компрессор</p>
+      <h1>Облегчитель фоточек для Аси</h1>
+      <p class="subtitle">Загрузи фоточку — и мы аккуратно сделаем её лёгкой, красивой и готовой для web.</p>
+
+      <div class="start-screen" id="startScreen">
+        <form class="upload-form" id="uploadForm">
+          <label class="dropzone" for="photoInput">
+            <input id="photoInput" type="file" accept="image/*" />
+            <span class="drop-icon">♡</span>
+            <span class="drop-title">Выбери фоточку</span>
+            <span class="drop-text" id="fileName">или перетащи её сюда</span>
+          </label>
+
+          <div class="actions">
+            <button class="btn btn-main" type="submit">Чпоньк</button>
+            <button class="btn btn-heart" id="loveBtn" type="button" aria-label="Признание в любви">
+              ♥
+            </button>
+          </div>
+        </form>
+
+        <div class="love-note" id="loveNote" aria-live="polite">
+          Я люблю тебя нежно, смешно и по-настоящему.
+        </div>
+      </div>
+
+      <section class="result hidden" id="result">
+        <div class="result-image" id="resultImageWrap">
+          <img id="resultImage" alt="Облегчённая картиночка" />
+          <span id="resultPlaceholder">тут появится облегчённая картиночка</span>
+        </div>
+        <h2>Вот твоя картиночка, малышка!</h2>
+        <p class="result-meta" id="resultMeta">Готовим лёгкую JPG-картиночку…</p>
+        <div class="result-actions">
+          <a href="#" class="btn btn-main download-button" id="downloadBtn" download>Скачать</a>
+          <button class="btn btn-secondary" id="newPhotoBtn" type="button">Загрузить новое</button>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "oblegchitel-fotochek-cloudflare-cerebras",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler pages dev public --kv=LOVE_LIMITS",
+    "deploy": "wrangler pages deploy public"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

@@ -1,0 +1,11 @@
+name = "oblegchitel-fotochek"
+compatibility_date = "2026-07-06"
+pages_build_output_dir = "public"
+
+[[kv_namespaces]]
+binding = "LOVE_LIMITS"
+id = "PASTE_KV_NAMESPACE_ID_HERE"
+
+[vars]
+# Не клади CEREBRAS_API_KEY сюда.
+# В Cloudflare Dashboard добавь его как encrypted Secret.
