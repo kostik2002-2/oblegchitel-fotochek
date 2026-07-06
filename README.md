@@ -32,4 +32,4 @@ Pages project → Settings → Variables and secrets → Add:
 CEREBRAS_API_KEY
 ```
 
-Значение — твой ключ Cerebras. Нужно сохранить как Secret / Encrypted.
+Значение — твой ключ Cerebras. Нужно сохранить как Secret / Encrypted. 
