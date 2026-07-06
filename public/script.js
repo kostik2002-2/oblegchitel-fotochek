@@ -15,6 +15,11 @@ const resultMeta = document.querySelector("#resultMeta");
 const MAX_SHORT_SIDE = 2000;
 const JPEG_QUALITY = 0.85;
 
+const LOVE_LIMIT = 10;
+const LOVE_WINDOW_MS = 60 * 60 * 1000;
+const LOVE_STORAGE_KEY = "asya-love-limit-v3";
+const BLOCK_MESSAGE = "Любовь моя, отдохни часок, дай мне собраться с мыслями, мы обязательно продолжим!";
+
 let loveTimerId = null;
 let processedUrl = null;
 let processedFileName = "asya-photo-light.jpg";
@@ -112,6 +117,31 @@ newPhotoBtn.addEventListener("click", () => {
 });
 
 loveBtn.addEventListener("click", async () => {
+  const state = getLoveState();
+  const now = Date.now();
+
+  if (state.blockedUntil && now < state.blockedUntil) {
+    loveNote.textContent = BLOCK_MESSAGE;
+    loveNote.classList.add("visible");
+    applyLoveCooldown(state.blockedUntil);
+    return;
+  }
+
+  if (state.count >= LOVE_LIMIT) {
+    const blockedUntil = now + LOVE_WINDOW_MS;
+
+    saveLoveState({
+      count: LOVE_LIMIT,
+      windowStartedAt: state.windowStartedAt || now,
+      blockedUntil
+    });
+
+    loveNote.textContent = BLOCK_MESSAGE;
+    loveNote.classList.add("visible");
+    applyLoveCooldown(blockedUntil);
+    return;
+  }
+
   loveBtn.disabled = true;
   loveBtn.textContent = "…";
 
@@ -129,11 +159,18 @@ loveBtn.addEventListener("click", async () => {
     loveNote.textContent = data.message || "Я люблю тебя.";
     loveNote.classList.add("visible");
 
-    if (data.blocked) {
-      const retryAfterSeconds = Number(data.retryAfter || 3600);
-      applyLoveCooldown(Date.now() + retryAfterSeconds * 1000);
+    if (!response.ok || data.error) {
+      loveBtn.disabled = false;
+      loveBtn.textContent = "♥";
       return;
     }
+
+    const freshState = getLoveState();
+    saveLoveState({
+      count: freshState.count + 1,
+      windowStartedAt: freshState.windowStartedAt || now,
+      blockedUntil: 0
+    });
 
     loveBtn.disabled = false;
     loveBtn.textContent = "♥";
@@ -145,6 +182,8 @@ loveBtn.addEventListener("click", async () => {
     loveBtn.textContent = "♥";
   }
 });
+
+initLoveLimit();
 
 document.addEventListener("click", (event) => {
   createHeartBurst(event.clientX, event.clientY);
@@ -223,6 +262,61 @@ function formatBytes(bytes) {
   }
 
   return `${value.toFixed(value >= 10 || unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
+}
+
+function getLoveState() {
+  const now = Date.now();
+  const fallback = {
+    count: 0,
+    windowStartedAt: now,
+    blockedUntil: 0
+  };
+
+  try {
+    const raw = localStorage.getItem(LOVE_STORAGE_KEY);
+
+    if (!raw) return fallback;
+
+    const parsed = JSON.parse(raw);
+    const blockedUntil = Number(parsed.blockedUntil || 0);
+
+    if (blockedUntil && now < blockedUntil) {
+      return {
+        count: Number(parsed.count || 0),
+        windowStartedAt: Number(parsed.windowStartedAt || now),
+        blockedUntil
+      };
+    }
+
+    const windowStartedAt = Number(parsed.windowStartedAt || 0);
+
+    if (!windowStartedAt || now - windowStartedAt >= LOVE_WINDOW_MS) {
+      saveLoveState(fallback);
+      return fallback;
+    }
+
+    return {
+      count: Number(parsed.count || 0),
+      windowStartedAt,
+      blockedUntil: 0
+    };
+  } catch {
+    return fallback;
+  }
+}
+
+function saveLoveState(state) {
+  localStorage.setItem(LOVE_STORAGE_KEY, JSON.stringify(state));
+}
+
+function initLoveLimit() {
+  const state = getLoveState();
+
+  if (state.blockedUntil && Date.now() < state.blockedUntil) {
+    loveNote.textContent = BLOCK_MESSAGE;
+    loveNote.classList.add("visible");
+    applyLoveCooldown(state.blockedUntil);
+  }
 }
 
 function applyLoveCooldown(blockedUntil) {

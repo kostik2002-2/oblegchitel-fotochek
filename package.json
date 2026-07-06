@@ -1,12 +1,5 @@
 {
-  "name": "oblegchitel-fotochek-cloudflare-durable",
+  "name": "oblegchitel-fotochek-cloudflare-pages",
   "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "wrangler pages dev public",
-    "deploy": "wrangler pages deploy public"
-  },
-  "devDependencies": {
-    "wrangler": "^4.0.0"
-  }
+  "private": true
 }

@@ -1,35 +1,35 @@
-# Облегчитель фоточек для Аси — Cloudflare + Cerebras + Durable Objects
+# Облегчитель фоточек для Аси — Cloudflare Pages + Cerebras
 
-KV больше не используется.
+Эта версия совместима с Cloudflare Pages без `wrangler.toml`.
 
-Лимит 10 признаний в час хранится через Cloudflare Durable Objects:
+## Что внутри
 
-- 10 признаний в час на IP;
-- на 11 запрос:
+- `public/` — сайт и конвертер фото в браузере.
+- `functions/api/love.js` — Cloudflare Pages Function, которая вызывает Cerebras API.
+- `package.json` — служебный файл.
+
+## Важно
+
+`wrangler.toml` больше не нужен и должен быть удалён из GitHub.
+
+## Лимит
+
+Сейчас лимит 10 признаний в час сделан на стороне браузера через `localStorage`:
+
+- 10 признаний;
+- на 11-е появляется:
   «Любовь моя, отдохни часок, дай мне собраться с мыслями, мы обязательно продолжим!»;
 - кнопка блокируется;
 - вместо сердечка появляется таймер.
 
-## Что нужно настроить
+Ключ Cerebras при этом не попадает в браузер. Он хранится только в Cloudflare Secret.
 
-В Cloudflare Pages нужно добавить только секрет:
+## Что нужно настроить в Cloudflare
+
+Pages project → Settings → Variables and secrets → Add:
 
 ```txt
 CEREBRAS_API_KEY
 ```
 
-Ключ нельзя вставлять в HTML, JS или `wrangler.toml`.
-
-## Проверка
-
-После деплоя открой:
-
-```txt
-https://oblegchitel-fotochek.pages.dev/api/love
-```
-
-Должно ответить:
-
-```txt
-Love API работает. Используй POST /api/love.
-```
+Значение — твой ключ Cerebras. Нужно сохранить как Secret / Encrypted.
