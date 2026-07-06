@@ -9,7 +9,7 @@ export async function onRequestPost(context) {
   }
 
   try {
-    const message = await generateLoveMessage(env.CEREBRAS_API_KEY);
+    const message = await generateLoveMessage(env.CEREBRAS_API_KEY, env.CEREBRAS_MODEL);
 
     return jsonResponse({
       blocked: false,
@@ -31,7 +31,7 @@ export async function onRequestGet() {
   });
 }
 
-async function generateLoveMessage(apiKey) {
+async function generateLoveMessage(apiKey, modelFromEnv) {
   const response = await fetch("https://api.cerebras.ai/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -39,7 +39,7 @@ async function generateLoveMessage(apiKey) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      model: "gpt-oss-120b",
+      model: modelFromEnv || "gpt-oss-120b",
       messages: [
         {
           role: "system",
@@ -50,24 +50,53 @@ async function generateLoveMessage(apiKey) {
           content: "Напиши новое короткое признание в любви для Аси."
         }
       ],
-      max_completion_tokens: 90,
+      max_completion_tokens: 350,
       temperature: 0.9
     })
   });
 
+  const rawText = await response.text();
+
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Cerebras error ${response.status}: ${text}`);
+    throw new Error(`Cerebras error ${response.status}: ${rawText}`);
   }
 
-  const data = await response.json();
-  const content = data?.choices?.[0]?.message?.content?.trim();
+  let data;
+
+  try {
+    data = JSON.parse(rawText);
+  } catch {
+    throw new Error(`Cerebras returned non-JSON response: ${rawText}`);
+  }
+
+  const message = data?.choices?.[0]?.message;
+  const content = extractTextContent(message?.content);
 
   if (!content) {
-    throw new Error("Cerebras returned empty content");
+    throw new Error(`Cerebras returned empty content. Raw response: ${JSON.stringify(data)}`);
   }
 
   return content.replace(/^["«]+|["»]+$/g, "").trim();
+}
+
+function extractTextContent(content) {
+  if (typeof content === "string") {
+    return content.trim();
+  }
+
+  if (Array.isArray(content)) {
+    return content
+      .map((part) => {
+        if (typeof part === "string") return part;
+        if (typeof part?.text === "string") return part.text;
+        if (typeof part?.content === "string") return part.content;
+        return "";
+      })
+      .join(" ")
+      .trim();
+  }
+
+  return "";
 }
 
 function jsonResponse(data, status = 200) {
