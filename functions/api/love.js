@@ -47,7 +47,7 @@ async function generateLoveMessage(apiKey, modelFromEnv) {
         },
         {
           role: "user",
-          content: "Напиши новое короткое признание в любви для Аси."
+          content: "Напиши новое короткое признание в любви для Аси. Начни текст строго со слов «Ася,». Не повторяй ранее использованные формулировки."
         }
       ],
       max_completion_tokens: 350,
